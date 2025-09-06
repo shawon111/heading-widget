@@ -15,7 +15,7 @@ export interface HeadlineSettings {
     gradientTo: string;
     effects: {
         fadeIn: boolean;
-        hoverGrow: boolean;
+        hoverGlow: boolean;
         perLetter: boolean;
         shadow: boolean;
     };
@@ -42,7 +42,7 @@ const HeadlineWidget: React.FC = () => {
         gradientTo: "#ec4899",
         effects: {
             fadeIn: true,
-            hoverGrow: false,
+            hoverGlow: false,
             perLetter: false,
             shadow: false,
         },

@@ -25,12 +25,12 @@ const HeadlinePreview: React.FC<Props> = ({ settings, fontFamilies }) => {
     const gradientStyle = gradient
         ? {
             backgroundImage: `linear-gradient(${gradientDirection === "to-r"
-                    ? "to right"
-                    : gradientDirection === "to-l"
-                        ? "to left"
-                        : gradientDirection === "to-t"
-                            ? "to top"
-                            : "to bottom"
+                ? "to right"
+                : gradientDirection === "to-l"
+                    ? "to left"
+                    : gradientDirection === "to-t"
+                        ? "to top"
+                        : "to bottom"
                 }, ${gradientFrom}, ${gradientTo})`,
             WebkitBackgroundClip: "text",
             color: "transparent"
@@ -42,6 +42,12 @@ const HeadlinePreview: React.FC<Props> = ({ settings, fontFamilies }) => {
             <motion.h1
                 initial={effects.fadeIn ? { opacity: 0, y: 20 } : false}
                 animate={effects.fadeIn ? { opacity: 1, y: 0 } : {}}
+                whileHover={effects.hoverGlow ? {
+                    textShadow: `
+                    0 0 64px ${gradientFrom},
+                    0 0 128px ${gradientTo}`,
+                    scale: 1.05,
+                } : {}}
                 transition={{ duration: 0.6 }}
                 style={{
                     fontSize: `${fontSize}px`,
@@ -49,8 +55,8 @@ const HeadlinePreview: React.FC<Props> = ({ settings, fontFamilies }) => {
                     fontWeight,
                     ...(gradient ? gradientStyle : { color: textColor }),
                 }}
-                className={`text-center ${effects.shadow ? "drop-shadow-lg" : ""
-                    } ${effects.hoverGrow ? "hover:scale-105 transition-transform" : ""}`}
+                className={`text-center  ${effects.shadow ? "drop-shadow-lg" : ""
+                    }`}
             >
                 {effects.perLetter
                     ? text.split("").map((char, i) => (
