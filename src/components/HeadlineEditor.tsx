@@ -21,16 +21,16 @@ const HeadlineEditor: React.FC<Props> = ({ settings, setSettings, fontFamilies }
                 placeholder="Enter headline text"
             />
             {/* Font Size */}
-            <label className="text-sm font-medium">Font Size</label>
+            <label className="text-sm font-medium">Font Size (px)</label>
             <input
-                type="range"
-                min={16}
-                max={96}
+                type="number"
+                min={8}
+                max={200}
                 value={settings.fontSize}
                 onChange={(e) =>
-                    setSettings({ ...settings, fontSize: parseInt(e.target.value) })
+                    setSettings({ ...settings, fontSize: parseInt(e.target.value) || settings.fontSize })
                 }
-                className="w-full"
+                className="border rounded-lg p-2 w-full"
             />
             {/* Font Familky */}
             <label className="text-sm font-medium">Font Family</label>
