@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import HeadlinePreview from "./HeadlinePreview";
 import HeadlineEditor from "./HeadlineEditor";
 
+export interface StyledWords {
+    text: string;
+    highlight: boolean;
+    underline: boolean;
+    block: boolean;
+    uuid: string;
+}
 
 export interface HeadlineSettings {
     text: string;
@@ -13,6 +20,7 @@ export interface HeadlineSettings {
     gradientDirection: "to-r" | "to-l" | "to-t" | "to-b";
     gradientFrom: string;
     gradientTo: string;
+    styledWords: StyledWords[];
     effects: {
         fadeIn: boolean;
         hoverGlow: boolean;
@@ -40,6 +48,7 @@ const HeadlineWidget: React.FC = () => {
         gradientDirection: "to-r",
         gradientFrom: "#4f46e5",
         gradientTo: "#ec4899",
+        styledWords: [],
         effects: {
             fadeIn: true,
             hoverGlow: false,

@@ -1,5 +1,5 @@
 import React from "react";
-import type { HeadlineSettings } from "./HeadlineWidget";
+import type { HeadlineSettings, StyledWords } from "./HeadlineWidget";
 
 
 interface Props {
@@ -12,7 +12,7 @@ const HeadlineEditor: React.FC<Props> = ({ settings, setSettings, fontFamilies }
     const handleSettingsExport = () => {
         // prepare json
         const fontFamily = fontFamilies[settings.fontFamily]
-        const updatedSettings:HeadlineSettings = {
+        const updatedSettings: HeadlineSettings = {
             ...settings,
             fontFamily
         }
@@ -28,6 +28,43 @@ const HeadlineEditor: React.FC<Props> = ({ settings, setSettings, fontFamilies }
 
         URL.revokeObjectURL(url);
     }
+
+    // handle word styling
+    const handleWordStyling = (text: string) => {
+        const isPresent = settings.styledWords.some(item => item.text === text)
+        if (isPresent) {
+            return
+        }
+        const uuid = () => Math.random().toString(36).substring(2, 10) + "-" + Math.random().toString(36).substring(2, 6) + "-" + Math.random().toString(36).substring(2, 6) + "-" + Math.random().toString(36).substring(2, 10);
+
+        const newWord = {
+            text,
+            uuid: uuid(),
+            highlight: false,
+            underline: false,
+            block: false
+        }
+        setSettings({ ...settings, styledWords: [...settings.styledWords, newWord] })
+    }
+
+    const handleStyleChange = (id: string, styleType: keyof StyledWords) => {
+        setSettings(prev => ({
+            ...prev,
+            styledWords: prev.styledWords.map(word =>
+                word.uuid === id
+                    ? { ...word, [styleType]: !word[styleType] }
+                    : word
+            )
+        }));
+    };
+
+    const removeWord = (id: string) => {
+        setSettings(prev=> ({
+            ...prev,
+            styledWords: prev.styledWords.filter(word => word.uuid !== id)
+        }))
+    }
+
     return (
         <div className="w-full lg:w-96 bg-white rounded-2xl shadow-lg p-6 flex flex-col gap-4">
             <h2 className="text-xl font-semibold mb-2">Edit Headline</h2>
@@ -162,6 +199,59 @@ const HeadlineEditor: React.FC<Props> = ({ settings, setSettings, fontFamilies }
                     {key}
                 </label>
             ))}
+            {/* Words Styling */}
+            <label className="text-sm font-medium">Select word to style</label>
+            <select
+                onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === "select") return;
+                    handleWordStyling(value);
+                }
+                }
+                defaultValue="select"
+                className="border rounded-lg p-2 w-full"
+            >
+                <option value="select">Select Word</option>
+                {
+                    settings.text.split(" ").map((word, index) => <option value={word.toLowerCase()} key={index}>
+                        {word}
+                    </option>)
+                }
+            </select>
+            {
+                (settings.styledWords.length >= 1 && settings.styledWords[0].text !== "select") && settings.styledWords.map((word, index) => {
+                    return <div key={index}>
+                        <div className="mb-2 flex items-center justify-between">
+                            <button className="btn bg-gray-100 rounded px-3 py-2 text-sm text-gray-700">{word.text}</button>
+                            <button onClick={()=> removeWord(word.uuid)} className="btn bg-red-100 rounded px-3 py-2 text-sm text-red-700 cursor-pointer">&#9747; remove</button>
+                        </div>
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                checked={word.underline}
+                                onChange={() => handleStyleChange(word.uuid, "underline")}
+                            />
+                            Underline
+                        </label>
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                checked={word.highlight}
+                                onChange={() => handleStyleChange(word.uuid, "highlight")}
+                            />
+                            Highlight
+                        </label>
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                checked={word.block}
+                                onChange={() => handleStyleChange(word.uuid, "block")}
+                            />
+                            Background Block
+                        </label>
+                    </div>
+                })
+            }
             {/* Export */}
             <button
                 onClick={() => handleSettingsExport()}

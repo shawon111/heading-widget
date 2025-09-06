@@ -37,6 +37,52 @@ const HeadlinePreview: React.FC<Props> = ({ settings, fontFamilies }) => {
         }
         : {};
 
+    // render styled texts
+    const renderStyledText = () => {
+        if (effects.perLetter) {
+            return text.split("").map((char, i) => (
+                <motion.span
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                >
+                    {char}
+                </motion.span>
+            ));
+        }
+
+        // Split text into words and preserve spaces
+        const words = text.split(/(\s+)/);
+
+        return words.map((word, index) => {
+            // If it's a space, render it as-is
+            if (/\s+/.test(word)) {
+                return <span key={`space-${index}`}>{word}</span>;
+            }
+
+            // Find if word has styles
+            const styledWord = settings.styledWords.find(sw => sw.text === word.toLowerCase().trim());
+
+            if (styledWord) {
+                return (
+                    <span
+                        key={`word-${index}`}
+                        className={`
+                            ${styledWord.highlight ? 'bg-yellow-200' : ''}
+                            ${styledWord.underline ? 'underline' : ''}
+                            ${styledWord.block ? 'bg-gray-200 px-2 py-2 rounded-lg' : ''}
+                        `}
+                    >
+                        {word}
+                    </span>
+                );
+            }
+
+            // Return unstyled word
+            return <span key={`word-${index}`}>{word}</span>;
+        });
+    };
     return (
         <div className="flex-1 flex items-center justify-center bg-gray-100 rounded-2xl px-6 py-8 lg:py-16 shadow-inner h-[fit-content]">
             <motion.h1
@@ -58,18 +104,7 @@ const HeadlinePreview: React.FC<Props> = ({ settings, fontFamilies }) => {
                 className={`text-center  ${effects.shadow ? "drop-shadow-lg" : ""
                     }`}
             >
-                {effects.perLetter
-                    ? text.split("").map((char, i) => (
-                        <motion.span
-                            key={i}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.05 }}
-                        >
-                            {char}
-                        </motion.span>
-                    ))
-                    : text}
+                {renderStyledText()}
             </motion.h1>
         </div>
     );
