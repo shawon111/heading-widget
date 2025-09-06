@@ -9,6 +9,25 @@ interface Props {
 }
 
 const HeadlineEditor: React.FC<Props> = ({ settings, setSettings, fontFamilies }) => {
+    const handleSettingsExport = () => {
+        // prepare json
+        const fontFamily = fontFamilies[settings.fontFamily]
+        const updatedSettings:HeadlineSettings = {
+            ...settings,
+            fontFamily
+        }
+        const createJson = JSON.stringify(updatedSettings, null, 2);
+        const blob = new Blob([createJson], { type: 'application/json' })
+        const url = URL.createObjectURL(blob)
+
+        // handle download
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "headline-widget";
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
     return (
         <div className="w-full lg:w-96 bg-white rounded-2xl shadow-lg p-6 flex flex-col gap-4">
             <h2 className="text-xl font-semibold mb-2">Edit Headline</h2>
@@ -145,11 +164,8 @@ const HeadlineEditor: React.FC<Props> = ({ settings, setSettings, fontFamilies }
             ))}
             {/* Export */}
             <button
-                onClick={() => {
-                    navigator.clipboard.writeText(JSON.stringify(settings, null, 2));
-                    alert("Headline settings copied to clipboard!");
-                }}
-                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                onClick={() => handleSettingsExport()}
+                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
             >
                 Export JSON
             </button>
