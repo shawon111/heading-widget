@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import HeadlinePreview from "./HeadlinePreview";
+import HeadlineEditor from "./HeadlineEditor";
 
 
 export interface HeadlineSettings {
@@ -23,13 +23,20 @@ export interface HeadlineSettings {
 
 
 const HeadlineWidget: React.FC = () => {
+    const fontFamilies: Record<string, string> = {
+        Roboto: "'Roboto', sans-serif",
+        Poppins: "'Poppins', sans-serif",
+        OpenSans: "'Open Sans', sans-serif",
+        Inter: "'Inter', sans-serif",
+        Lato: "'Lato', sans-serif"
+    };
     const [settings, setSettings] = useState<HeadlineSettings>({
         text: "Your Awesome Headline",
         fontSize: 48,
         textColor: "#000000",
-        fontFamily: "sans-serif",
+        fontFamily: "Roboto",
         fontWeight: 700,
-        gradient: false,
+        gradient: true,
         gradientDirection: "to-r",
         gradientFrom: "#4f46e5",
         gradientTo: "#ec4899",
@@ -44,7 +51,8 @@ const HeadlineWidget: React.FC = () => {
 
     return (
         <div className="flex flex-col lg:flex-row gap-6 p-6 w-full">
-            <HeadlinePreview settings={settings} />
+            <HeadlinePreview fontFamilies={fontFamilies} settings={settings} />
+            <HeadlineEditor fontFamilies={fontFamilies} settings={settings} setSettings={setSettings} />
         </div>
     );
 };
