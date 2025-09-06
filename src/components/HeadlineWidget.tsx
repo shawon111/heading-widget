@@ -15,7 +15,7 @@ export interface HeadlineSettings {
     gradientTo: string;
     effects: {
         fadeIn: boolean;
-        hoverGlow: boolean;
+        hoverGrow: boolean;
         perLetter: boolean;
         shadow: boolean;
     };
@@ -31,7 +31,7 @@ const HeadlineWidget: React.FC = () => {
         Lato: "'Lato', sans-serif"
     };
     const [settings, setSettings] = useState<HeadlineSettings>({
-        text: "Your Awesome Headline",
+        text: "Editable Headline",
         fontSize: 48,
         textColor: "#000000",
         fontFamily: "Roboto",
@@ -42,7 +42,7 @@ const HeadlineWidget: React.FC = () => {
         gradientTo: "#ec4899",
         effects: {
             fadeIn: true,
-            hoverGlow: false,
+            hoverGrow: false,
             perLetter: false,
             shadow: false,
         },

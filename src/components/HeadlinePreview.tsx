@@ -38,7 +38,7 @@ const HeadlinePreview: React.FC<Props> = ({ settings, fontFamilies }) => {
         : {};
 
     return (
-        <div className="flex-1 flex items-center justify-center bg-gray-100 rounded-2xl p-6 shadow-inner">
+        <div className="flex-1 flex items-center justify-center bg-gray-100 rounded-2xl px-6 py-8 lg:py-16 shadow-inner h-[fit-content]">
             <motion.h1
                 initial={effects.fadeIn ? { opacity: 0, y: 20 } : false}
                 animate={effects.fadeIn ? { opacity: 1, y: 0 } : {}}
@@ -50,7 +50,7 @@ const HeadlinePreview: React.FC<Props> = ({ settings, fontFamilies }) => {
                     ...(gradient ? gradientStyle : { color: textColor }),
                 }}
                 className={`text-center ${effects.shadow ? "drop-shadow-lg" : ""
-                    } ${effects.hoverGlow ? "hover:scale-105 transition-transform" : ""}`}
+                    } ${effects.hoverGrow ? "hover:scale-105 transition-transform" : ""}`}
             >
                 {effects.perLetter
                     ? text.split("").map((char, i) => (
