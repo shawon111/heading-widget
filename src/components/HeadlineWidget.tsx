@@ -44,7 +44,7 @@ const HeadlineWidget: React.FC = () => {
         textColor: "#000000",
         fontFamily: "Roboto",
         fontWeight: 700,
-        gradient: true,
+        gradient: false,
         gradientDirection: "to-r",
         gradientFrom: "#4f46e5",
         gradientTo: "#ec4899",
